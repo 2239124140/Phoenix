@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--4XX 5xx页面公用-->
+<div id="error">
+    <h3 class="norsTitle" th:text ="'错误状态码：'+${status}" ></h3>
+    <p class="norsTitle2"  th:text="${#strings.isEmpty(path)} ? '': '错误请求路径'+${path}"></p>
+    <p class="norsTitle2"  th:text="${#strings.isEmpty(timestamp)} ? '': '日期:'+${#dates.format(timestamp, 'yyyy-MM-dd HH:mm:ss')}"></p>
+    <p class="norsTitle2"  th:text="${#strings.isEmpty(error)} ? '': '错误类型:'+${error}"></p>
+    <p class="norsTitle2"  th:text="${#strings.isEmpty(message)} or ${message}=='No message available' ? '':'错误消息:'+${message}"></p>
+
+    <p class="norsTitle2"  th:utext="${#strings.isEmpty(trace)} ? '': '异常信息:'+${trace}"></p>
+
+    <!-- <p class="norsTitle2"  th:text="${#strings.isEmpty(exception)} ? '': '异常类型'+${exception}"></p>-->
+</div>
+<!-- 左侧菜单栏目块 -->
+<div class="leftMeun" id="leftMeun">
+    <div id="logoDiv">
+        <p id="logoP">
+            <img id="logo" alt="后台管理" src="/static/common/images/logo.png"><span>后台管理</span>
+        </p>
+    </div>
+    <div id="personInfor">
+        <p id="userName" th:text="${#strings.isEmpty(currUser)} ? '无': ${currUser.realName}"></p>
+        <p>
+            <a href="/login/logout">退出登录</a>
+        </p>
+    </div>
+    <div class="meun-title">管理</div>
+    <div class="meun-item" href="/school/schoolList" aria-controls="sour"
+         role="tab" data-toggle="tab"
+         th:class="${activeModel=='school'?'meun-item meun-item-active':'meun-item'}">
+        <img src="/static/common/images/icon_house_grey.png">单位管理
+    </div>
+    <div class="meun-item" href="/proxy/list" aria-controls="char"
+         role="tab" data-toggle="tab"
+         th:class="${activeModel=='proxy'?'meun-item meun-item-active':'meun-item'}">
+        <img src="/static/common/images/icon_user_grey.png">代理服务管理
+    </div>
+    <div class="meun-item meun-item-active" href="/user/list"
+         aria-controls="user" role="tab" data-toggle="tab"
+         th:class="${activeModel=='user'?'meun-item meun-item-active':'meun-item'}">
+        <img src="/static/common/images/icon_chara_grey.png">用户管理
+    </div>
+    <div class="meun-item" href="/ds/list" aria-controls="regu"
+         role="tab" data-toggle="tab"
+         th:class="${activeModel=='ds'?'meun-item meun-item-active':'meun-item'}">
+        <img src="/static/common/images/icon_rule_grey.png">数据源管理
+    </div>
+    <div class="meun-item" href="/sql/list" aria-controls="sour"
+         role="tab" data-toggle="tab"
+         th:class="${activeModel=='sql'?'meun-item meun-item-active':'meun-item'}">
+        <img src="/static/common/images/icon_change_grey.png">SQL管理
+    </div>
+
+    <div class="meun-item meun-item-active" href="/file/list" aria-controls="sour"
+         role="tab" data-toggle="tab"
+         th:class="${activeModel=='file'?'meun-item meun-item-active':'meun-item'}">
+        <img src="/static/common/images/icon_change_grey.png">文件管理
+    </div>
+
+
+    <div class="meun-item meun-item-active" href="/poi/list" aria-controls="sour"
+         role="tab" data-toggle="tab"
+         th:class="${activeModel=='poi'?'meun-item meun-item-active':'meun-item'}">
+        <img src="/static/common/images/icon_change_grey.png">poi管理
+    </div>
+
+
+    <div class="meun-item meun-item-active" href="/echarts/list" aria-controls="sour"
+         role="tab" data-toggle="tab"
+         th:class="${activeModel=='echarts'?'meun-item meun-item-active':'meun-item'}">
+        <img src="/static/common/images/icon_change_grey.png">echarts管理
+    </div>
+
+
+
+</div>
+</body>
+</html>

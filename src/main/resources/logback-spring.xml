@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 文件输出格式 -->
+    <!-- <property name="PATTERN2" value="%d |-%-5level %logger{0} [%L] -| %msg%n" /> -->
+    <property name="DEV_PATTERN" value="|-%-5level-| %msg%n" />
+    <property name="TEST_PATTERN" value="%d |-%-5level-| %msg%n" />
+    <property name="PROD_PATTERN" value="%-12(%d{yyyy-MM-dd HH:mm:ss.SSS}) |-%-5level [%thread] %c [%L] -| %msg%n" />
+    <!-- test文件路径 -->
+    <property name="TEST_FILE_PATH" value="/opt/jenkins-in/tomcat9-ccpbuilding/projects/log" />
+    <!-- pro文件路径 -->
+    <property name="PRO_FILE_PATH" value="/usr/apps/yzweb/tomcat9-ccpbuilding/projects/log" />
+    <!-- 开发环境 -->
+    <springProfile name="dev">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        	<encoder>
+                <pattern>${DEV_PATTERN}</pattern>
+            </encoder>
+        </appender>
+        <!-- <logger name="com.chaoxing.ccpbuilding.module.meeting.*" level="debug" />  -->
+        <root level="info">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+    <!-- 测试环境 -->
+    <springProfile name="test">
+    	<!-- ConsoleAppender会输出控制台日志到 catalina.out -->
+    	<appender name="TEST_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        	<encoder>
+                <pattern>${TEST_PATTERN}</pattern>
+            </encoder>
+        </appender>
+        <!-- 每天产生一个文件 --><!-- 注意：info.log 中不会有用system.out.println 打印出来的信息-->
+        <appender name="TEST_INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <!-- 文件路径 -->
+            <file>${TEST_FILE_PATH}/info.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- 文件名称 -->
+                <fileNamePattern>${TEST_FILE_PATH}/info/info.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <!-- 文件最大保存历史数量 -->
+                <MaxHistory>100</MaxHistory>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${TEST_PATTERN}</pattern>
+            </layout>
+        </appender>
+        <appender name="TEST_WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <!-- 文件路径 -->
+            <file>${TEST_FILE_PATH}/warn.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- 文件名称 -->
+                <fileNamePattern>${TEST_FILE_PATH}/warn/warn.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <!-- 文件最大保存历史数量 -->
+                <MaxHistory>100</MaxHistory>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${TEST_PATTERN}</pattern>
+            </layout>
+            <!-- 过滤器三值逻辑
+    		如果返回DENY，那么记录事件立即被抛弃，不再经过剩余过滤器；
+			如果返回NEUTRAL，那么有序列表里的下一个过滤器会接着处理记录事件；
+			如果返回ACCEPT，那么记录事件被立即处理，不再经过剩余过滤器。 -->
+			<!-- 丢弃WARN级别以下的日志 -->
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">   
+      			<level>WARN</level>   
+    		</filter> 
+            <!-- <filter class="ch.qos.logback.classic.filter.LevelFilter"> 
+	            <level>WARN,ERROR</level>  
+	            <onMatch>ACCEPT</onMatch>  
+	            <onMismatch>DENY</onMismatch>  
+	        </filter> -->
+        </appender>
+        <!-- <logger name="com.chaoxing.ccpbuilding" level="debug" /> -->
+        <root level="info">
+            <appender-ref ref="TEST_CONSOLE" />
+            <appender-ref ref="TEST_INFO_FILE" />
+            <appender-ref ref="TEST_WARN_FILE" />
+        </root>
+    </springProfile>
+    <!-- 生产环境 -->
+    <springProfile name="prod">
+    	<appender name="PROD_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        	<encoder>
+                <pattern>${PROD_PATTERN}</pattern>
+            </encoder>
+        </appender>
+    	<appender name="PROD_INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <!-- 文件路径 -->
+            <file>${PRO_FILE_PATH}/info.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- 文件名称 -->
+                <fileNamePattern>${PRO_FILE_PATH}/info/info.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <!-- 文件最大保存历史数量 -->
+                <MaxHistory>100</MaxHistory>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${PROD_PATTERN}</pattern>
+            </layout>
+        </appender>
+        <appender name="PROD_WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${PRO_FILE_PATH}/warn.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${PRO_FILE_PATH}/warn/warn.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <MaxHistory>100</MaxHistory>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${PROD_PATTERN}</pattern>
+            </layout>
+            <!-- 丢弃WARN级别以下的日志 -->
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">   
+      			<level>WARN</level>   
+    		</filter>
+        </appender>
+        <root level="info">
+            <appender-ref ref="PROD_CONSOLE" />
+            <appender-ref ref="PROD_INFO_FILE" />
+            <appender-ref ref="PROD_WARN_FILE" />
+        </root>
+    </springProfile>
+</configuration>

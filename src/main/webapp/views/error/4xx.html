@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link href="/css/index.css" rel="stylesheet"/>
+    <style>
+    .norsSuggest {display: inline-block; color: #333; font-family: arial; font-size: 13px; position: relative; }
+    .norsTitle {font-size: 22px; font-family: Microsoft Yahei; font-weight: normal; color: #333; margin: 35px 0 25px 0; }
+    .norsTitle2 {font-family: arial; font-size: 13px; color: #666; }
+    .norsSuggest ol {margin-left: 47px; }
+    .norsSuggest li {margin: 13px 0; }
+    .foot{ background:#999999; color:#ffffff; padding:20px 0; text-align:center; font-size:14px; line-height:24px;}
+  </style>
+
+</head>
+<body>
+
+<div class="norsSuggest" th:if="${status}==404" >
+    <h3 class="norsTitle">很抱歉，您要访问的页面不存在！</h3>
+    <p class="norsTitle2">温馨提示：</p>
+    <ol>
+        <li>请检查您访问的网址是否正确</li>
+        <li>如果您不能确认访问的网址，请浏览<a href="/">主页</a>页面查看更多网址。</li>
+        <li>回到顶部重新发起搜索</li>
+        <li>如有任何意见或建议，请及时<a href="">反馈给我们</a>。</li>
+    </ol>
+</div>
+
+<div class="norsSuggest" th:if="${status}==400">
+    <h3 class="norsTitle">因为错误的语法导致服务器无法理解请求信息。</h3>
+</div>
+
+<div class="norsSuggest" th:if="${status}==403">
+    <h3 class="norsTitle">服务器接受请求，但是被拒绝处理。。</h3>
+</div>
+
+<div class="norsSuggest" th:if="${status}==405">
+    <h3 class="norsTitle">Request-Line 请求的方法不被允许通过指定的URI.</h3>
+</div>
+
+
+<div  id="default"  >
+    <div th:replace="commons/bar::#error"></div>
+</div>
+
+<div style="color:red;" id="foot"  >
+    <div th:text="${company}"></div>
+</div>
+
+</body>
+
+</html>

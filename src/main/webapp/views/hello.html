@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link href="/css/index.css" rel="stylesheet"/>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2 th:text="${msg}">aaa</h2>
+        <button onclick="test1()">ajax系统异常</button>
+        <button onclick="test2()">ajax自定义异常</button>
+        <a href="/test/error1">url系统异常</a>
+        <a href="/test/error2">url自定义异常</a>
+        <button onclick="test3()">result false返回</button>
+        <button onclick="test4()">result true返回</button>
+    </div>
+    <script>
+    function test1(){
+	    $.ajax({ 
+	        type: "post", 
+	        url: "/test/error1", 
+	        dataType: "json", 
+	        success: function(res) { 
+	            if(res.success){
+	                alert("此处为正常的处理逻辑"); 
+	            }else{
+	                alert(res.msg);
+	            }
+	        },
+	        error: function(res) { 
+	            alert("操作失败"); 
+	        }
+	    });
+    }
+    
+    function test2(){
+	    $.ajax({ 
+	        type: "post", 
+	        url: "/test/error2", 
+	        dataType: "json", 
+	        success: function(res) { 
+	            if(res.success){
+	                alert("请求成功无异常"); 
+	            }else{
+	                alert(res.msg);
+	            }
+	        },
+	        error: function(res) { 
+	            alert("操作失败"); 
+	        }
+	    });
+    }
+    
+    function test3(){
+	    $.ajax({ 
+	        type: "post", 
+	        url: "/test/error3", 
+	        dataType: "json", 
+	        success: function(res) { 
+	            if(res.success){
+	                alert("请求成功无异常"); 
+	            }else{
+	                alert(res.msg);
+	            }
+	        },
+	        error: function(res) { 
+	            alert("操作失败"); 
+	        }
+	    });
+    }
+    
+    function test4(){
+	    $.ajax({ 
+	        type: "post", 
+	        url: "/test/success", 
+	        dataType: "json", 
+	        success: function(res) { 
+	            if(res.success){
+	                alert("请求成功"); 
+	            }else{
+	                alert(res.msg);
+	            }
+	        },
+	        error: function(res) { 
+	            alert("操作失败"); 
+	        }
+	    });
+    }
+    
+    </script>
+</body>
+</html>

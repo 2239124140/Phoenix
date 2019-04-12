@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="ch" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>用户</title>
+    <link rel="stylesheet" type="text/css" href="/static/plugin/layui/css/layui.css" />
+    <script src="/static/common/js/jquery.min.js"></script>
+    <script src="/static/common/js/bootstrap.min.js"></script>
+    <script src="/static/plugin/jqueryform/jquery-form.js"></script>
+    <script src="/static/plugin/art-template3.1/template.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/plugin/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdn.bootcss.com/jquery.fileDownload/1.4.2/jquery.fileDownload.min.js"></script>
+    <script src="/static/common/js/jquery.nouislider.js"></script>
+    <script src="/static/common/js/echarts.min.js"></script>
+    <script>
+        $(function() {
+            $(".meun-item").click(function() {
+                $(".meun-item").removeClass("meun-item-active");
+                $(this).addClass("meun-item-active");
+                var itmeObj = $(".meun-item").find("img");
+                itmeObj.each(function() {
+                    var items = $(this).attr("src");
+                    items = items.replace("_grey.png", ".png");
+                    items = items.replace(".png", "_grey.png")
+                    $(this).attr("src", items);
+                });
+                var attrObj = $(this).find("img").attr("src");
+                attrObj = attrObj.replace("_grey.png", ".png");
+                $(this).find("img").attr("src", attrObj);
+                var href = $(this).attr("href");
+                window.location.href = href;
+            });
+
+            $(".toggle-btn").click(function() {
+                $("#leftMeun").toggleClass("show");
+                $("#rightContent").toggleClass("pd0px");
+            })
+        })
+        function sour() {
+            window.location.href = "sour.html";
+        }
+    </script>
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css"
+          href="/static/common/css/common.css" />
+    <link rel="stylesheet" type="text/css"
+          href="/static/common/css/slide.css" />
+    <link rel="stylesheet" type="text/css"
+          href="/static/common/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css"
+          href="/static/common/css/flat-ui.min.css" />
+    <link rel="stylesheet" type="text/css"
+          href="/static/common/css/jquery.nouislider.css">
+
+
+</head>
+
+<body>
+<div id="wrap">
+    <!-- 左侧菜单栏目块 -->
+    <!‐‐引入侧边栏;传入参数‐‐>
+    <div th:replace="commons/bar::#leftMeun(activeModel='echarts')"></div>
+    <!-- 右侧具体内容栏目 -->
+    <div id="rightContent">
+        <a class="toggle-btn" id="nimei"> <i
+                class="glyphicon glyphicon-align-justify"></i>
+        </a>
+
+
+
+        <div id="main2" style="width: 600px;height:400px;"></div>
+        <script>
+
+            var builderJson = {
+                "all": 10887,
+                "charts": {
+                    "map": 3237,
+                    "lines": 2164,
+                    "bar": 7561,
+                    "line": 7778,
+                    "pie": 7355,
+                    "scatter": 2405,
+                    "candlestick": 1842,
+                    "radar": 2090,
+                    "heatmap": 1762,
+                    "treemap": 1593,
+                    "graph": 2060,
+                    "boxplot": 1537,
+                    "parallel": 1908,
+                    "gauge": 2107,
+                    "funnel": 1692,
+                    "sankey": 1568
+                }
+            };
+
+
+
+            var myChart = echarts.init(document.getElementById('main2'))
+            myChart.setOption({
+                //backgroundColor: '#2c343c',
+                tooltip: {},
+                title: [{
+                    text: '在线构建',
+                    subtext: '总计 ' + builderJson.all,
+                    x: '25%',
+                    textAlign: 'center'
+                }],
+                grid: [{
+                    top: 50,
+                    width: '100%',
+                    bottom: '10%',
+                    left: 10,
+                    containLabel: true
+                }],
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        show: true,
+                        xAxisIndex: [0],
+                        start: 1,
+                        end: 35
+                    },
+                    {
+                        type: 'slider',
+                        show: true,
+                        yAxisIndex: [0],
+                        left: '93%',
+                        start: 29,
+                        end: 36
+                    },
+                    {
+                        type: 'inside',
+                        xAxisIndex: [0],
+                        start: 1,
+                        end: 35
+                    },
+                    {
+                        type: 'inside',
+                        yAxisIndex: [0],
+                        start: 29,
+                        end: 36
+                    }
+                ],
+                xAxis: [{
+                    type: 'value',
+                    max: 100,
+                    splitLine: {
+                        show: false
+                    }
+                }],
+                yAxis: [{
+                    type: 'category',
+                    data: Object.keys(builderJson.charts),
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 30
+                    },
+                    splitLine: {
+                        show: false
+                    }
+                }],
+                series: [{
+                    name: '分数',
+                    type: 'bar',
+                    stack: 'chart',
+                    z: 3,
+                    label: {
+                        normal: {
+                            position: 'right',
+                            show: true
+                        }
+                    },
+                    data: Object.keys(builderJson.charts).map(function (key) {
+                        return builderJson.charts[key];
+                    })
+                }]
+            });
+
+            var names=[];    //类别数组（实际用来盛放X轴坐标值）
+            var nums=[];    //销量数组（实际用来盛放Y坐标值）
+            myChart.showLoading();    //数据加载完之前先显示一段简单的loading动画
+            $.ajax({
+                type : "post",
+                url : "/echarts/getAll",
+                data : {
+                    "id" : 100
+                },
+                success : function(result) {
+                    if (result.success) {
+                        // 填入数据
+                        var datalist = result.data.list;
+                        for(var i=0;i<datalist.length;i++){
+                            names.push(datalist[i].name);    //挨个取出类别并填入类别数组
+                        }
+                        for(var i=0;i<datalist.length;i++){
+                            nums.push(datalist[i].score);    //挨个取出销量并填入销量数组
+                        }
+                        myChart.hideLoading();    //隐藏加载动画
+                        myChart.setOption({
+                            yAxis: {
+                                data: names
+                            },
+                            series: [{
+                                name: '分数',
+                                data: nums
+                            }],
+                            title: [{
+                                subtext: '总计 ' + result.data.all,
+                            }]
+
+                        });
+                    } else {
+                        alert(result.msg);
+                    }
+                },
+                error : function(XMLHttpRequest, textStatus) {
+                    myChart.hideLoading();    //隐藏加载动画
+                    alert("操作失败");
+                }
+            });
+
+
+
+        </script>
+
+    </div>
+</div>
+
+
+
+<!-- this page specific inline scripts -->
+<script>
+    laypage = layui.laypage
+
+    $(function() {
+        getData();
+    })
+    function getData(pageNum, pageSize) {
+
+    }
+
+
+
+
+</script>
+
+</body>
+
+</html>

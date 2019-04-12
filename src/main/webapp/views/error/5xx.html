@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link href="/css/index.css" rel="stylesheet"/>
+    <style>
+        .norsSuggest {display: inline-block; color: #333; font-family: arial; font-size: 13px; position: relative; }
+        .norsTitle {font-size: 22px; font-family: Microsoft Yahei; font-weight: normal; color: #333; margin: 35px 0 25px 0; }
+        .norsTitle2 {font-family: arial; font-size: 13px; color: #666; }
+        .norsSuggest ol {margin-left: 47px; }
+        .norsSuggest li {margin: 13px 0; }
+        .foot{ background:#999999; color:#ffffff; padding:20px 0; text-align:center; font-size:14px; line-height:24px;}
+    </style>
+
+</head>
+<body>
+
+<div class="norsSuggest" th:if="${status}==500" >
+    <h3 class="norsTitle">很抱歉，服务器崩溃了</h3>
+    <p class="norsTitle2">温馨提示：</p>
+    <ol>
+        <li>请等待</li>
+        <li>访问其他页面<a href="/">主页</a>页面查看更多网址。</li>
+        <li>回到顶部重新发起搜索</li>
+        <li>如有任何意见或建议，请及时<a href="">反馈给我们</a>。</li>
+    </ol>
+    <ol>
+        <li>错误原因</li>
+        <li> 1.web脚本错误，如php语法错误，lua语法错误等。</li>
+        <li> 2.访问量大的时候，由于系统资源限制，而不能打开过多的文件</li>
+    </ol>
+
+    <ol>
+        <li>一般分析思路：</li>
+        <li>  1.查看nginx error log ，查看php error log</li>
+        <li>  2.如果是too many open files，修改nginx的worker_rlimit_nofile参数，使用ulimit查看系统打开文件限制，修改/etc/security/limits.conf</li>
+        <li>  3.如果是脚本的问题，则需要修复脚本错误，并优化代码</li>
+        <li>   4.各种优化都做好，还是出现too many open files，那就要考虑做负载均衡，把流量分散到不同服务器上去了</li>
+    </ol>
+
+
+</div>
+
+<div class="norsSuggest" th:if="${status}==502">
+    <h3 class="norsTitle">因为错误的语法导致服务器无法理解请求信息。</h3>
+    <ol>
+        <li>错误原因</li>
+        <li> 502 Bad Gateway 是指请求已经执行，但是由于某种原因而没有执行完毕，最终导致进程终止。
+            一般来说，与conf的设置有关，也与执行程序性能有关，网站的访问量大，而进程数偏少。针对这种情况的502错误，只需增加进程数。</li>
+    </ol>
+    <ol>
+        <li>一般分析思路：</li>
+        <li> 1.使用nginx代理，而后端服务器发生故障；</li>
+        <li> 2.进程数不够用；</li>
+        <li> 3.执行时间长，或者是进程死掉；</li>
+        <li> 4.已经执行Gc等</li>
+    </ol>
+</div>
+
+<div class="norsSuggest" th:if="${status}==504">
+    <h3 class="norsTitle">表示超时，也就是客户端所发出的请求没有到达网关，请求没有得到可以执行</h3>
+</div>
+
+<div class="norsSuggest" th:if="${status}==503">
+    <h3 class="norsTitle">
+        由于临时的服务器维护或者过载，服务器当前无法处理请求。通常这个是暂时的，一段时间会恢复。
+        有时单个ip并发设置过小也会导致503报错。
+    </h3>
+</div>
+
+
+<div  id="default"  >
+    <div th:replace="commons/bar::#error"></div>
+</div>
+
+<div style="color:red;" id="foot"  >
+    <div th:text="${company}"></div>
+</div>
+
+</body>
+
+</html>

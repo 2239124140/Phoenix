@@ -1,0 +1,59 @@
+server:
+  port: 80
+
+
+spring:
+  thymeleaf:
+    #配置是清除缓存，实现热部署。也就是修改了html后不用重启，刷新页面就能看到效果.系统上线可以再把这个缓存打开。
+    cache: false
+    prefix: /views/
+    mode: HTML
+  datasource:
+    db1:
+      url: jdbc:mysql://127.0.0.1:3306/mybatis_plus?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      druid:
+        filters: stat,wall
+        web-stat-filter:
+          enabled: true
+          url-pattern: /*
+        stat-view-servlet:
+          enabled: true
+          url-pattern: /druid/*
+    db2:
+      url: jdbc:mysql://127.0.0.1:3306/mybatis_plus01?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      druid:
+        filters: stat,wall
+        web-stat-filter:
+          enabled: true
+          url-pattern: /*
+        stat-view-servlet:
+          enabled: true
+          url-pattern: /druid/*
+    db3:
+      url: jdbc:mysql://127.0.0.1:3306/mybatis_plus02?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      druid:
+        filters: stat,wall
+        web-stat-filter:
+          enabled: true
+          url-pattern: /*
+        stat-view-servlet:
+          enabled: true
+          url-pattern: /druid/*
+
+
+
+
+logging:
+  level:
+    com.chaoxing.myproject01: info
+    com.chaoxing.myproject01.config.springMVC: debug
+    com.chaoxing.myproject01.config.multipledatasource: debug

@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="ch" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="format-detection" content="telephone=no">
+	<title>用户</title>
+	<link rel="stylesheet" type="text/css" href="/static/plugin/layui/css/layui.css" />
+	<script src="/static/common/js/jquery.min.js"></script>
+	<script src="/static/common/js/bootstrap.min.js"></script>
+	<script src="/static/plugin/jqueryform/jquery-form.js"></script>
+	<script src="/static/plugin/art-template3.1/template.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/static/plugin/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+        $(function() {
+            $(".meun-item").click(function() {
+                $(".meun-item").removeClass("meun-item-active");
+                $(this).addClass("meun-item-active");
+                var itmeObj = $(".meun-item").find("img");
+                itmeObj.each(function() {
+                    var items = $(this).attr("src");
+                    items = items.replace("_grey.png", ".png");
+                    items = items.replace(".png", "_grey.png")
+                    $(this).attr("src", items);
+                });
+                var attrObj = $(this).find("img").attr("src");
+                attrObj = attrObj.replace("_grey.png", ".png");
+                $(this).find("img").attr("src", attrObj);
+                var href = $(this).attr("href");
+                window.location.href = href;
+            });
+
+            $(".toggle-btn").click(function() {
+                $("#leftMeun").toggleClass("show");
+                $("#rightContent").toggleClass("pd0px");
+            })
+        })
+        function sour() {
+            window.location.href = "sour.html";
+        }
+	</script>
+	<!--[if lt IE 9]>
+	<script src="js/html5shiv.min.js"></script>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+
+	<link rel="stylesheet" type="text/css"
+		  href="/static/common/css/common.css" />
+	<link rel="stylesheet" type="text/css"
+		  href="/static/common/css/slide.css" />
+	<link rel="stylesheet" type="text/css"
+		  href="/static/common/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css"
+		  href="/static/common/css/flat-ui.min.css" />
+	<link rel="stylesheet" type="text/css"
+		  href="/static/common/css/jquery.nouislider.css">
+</head>
+
+<body>
+<div id="wrap">
+	<!-- 左侧菜单栏目块 -->
+	<!‐‐引入侧边栏;传入参数‐‐>
+	<div th:replace="commons/bar::#leftMeun(activeModel='user')"></div>
+	<!-- 右侧具体内容栏目 -->
+	<div id="rightContent">
+		<a class="toggle-btn" id="nimei"> <i
+				class="glyphicon glyphicon-align-justify"></i>
+		</a>
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<!--用户管理模块-->
+			<div role="tabpanel" class="tab-pane" id="user">
+				<div class="check-div form-inline">
+					<div class="col-xs-3">
+						<button class="btn btn-yellow btn-xs" data-toggle="modal"
+								data-target="#addUser">添加用户</button>
+					</div>
+					<div class="col-xs-4">
+						<input id="searchName" type="text" class="form-control input-sm"
+							   placeholder="输入文字搜索">
+						<button class="btn btn-white btn-xs " onclick="search()">查 询</button>
+					</div>
+
+				</div>
+				<div class="data-div">
+					<div class="row tableHeader">
+						<div class="col-xs-2 ">序号</div>
+						<div class="col-xs-2 ">真实姓名</div>
+						<div class="col-xs-2">账号</div>
+						<div class="col-xs-2">单位id</div>
+						<div class="col-xs-2">状态</div>
+						<div class="col-xs-2">操作</div>
+					</div>
+					<div class="tablebody" id="list">
+
+
+					</div>
+
+				</div>
+				<!--页码块-->
+				<div id="blank" style="text-align: center; margin-top: 15px; display: none;">暂无数据</div>
+				<footer class="footer">
+					<ul class="pagination" id="pagination">
+
+					</ul>
+
+				</footer>
+
+				<!--弹出添加用户窗口-->
+				<div class="modal fade" id="addUser" role="dialog"
+					 aria-labelledby="gridSystemModalLabel">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<h4 class="modal-title" id="gridSystemModalLabelTitle">添加用户</h4>
+							</div>
+							<div class="modal-body">
+								<div class="container-fluid">
+									<form class="form-horizontal" id="form">
+
+										<div class="form-group">
+											<label for="realName" class="col-xs-3 control-label">真实姓名：</label>
+											<div class="col-xs-8 ">
+												<input type="" class="form-control input-sm duiqi"
+													   id="realName" name="realName" placeholder="">
+											</div>
+										</div>
+										<div class="form-group ">
+											<label for="uName" class="col-xs-3 control-label">用户名：</label>
+											<div class="col-xs-8 ">
+												<input type="" class="form-control input-sm duiqi"
+													   id="uName" name="userName" placeholder="">
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="password" class="col-xs-3 control-label">密码：</label>
+											<div class="col-xs-8">
+												<input type="password" class="form-control input-sm duiqi"
+													   id="password" name="password" placeholder="">
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="aid" class="col-xs-3 control-label">单位id：</label>
+											<div class="col-xs-8">
+												<input type="" class="form-control input-sm duiqi" id="aid"
+													   name="aid" placeholder="">
+											</div>
+										</div>
+										<div class="form-group">
+											<input type="hidden" id="status" name="status"></input> <label
+												for="status" class="col-xs-3 control-label">状态：</label>
+											<div class="col-xs-8">
+												<label class="control-label" for="situation1"> <input
+														type="radio" name="situation" id="situation1" value="0" checked>正常
+												</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label
+													class="control-label" for="situation2"> <input
+													type="radio" name="situation" id="situation2" value="1"> 禁用
+											</label>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-xs btn-white"
+										data-dismiss="modal">取 消</button>
+								<button type="button" class="btn btn-xs btn-green"
+										onclick="addUser()">保 存</button>
+							</div>
+						</div>
+						<!-- /.modal-content -->
+					</div>
+					<!-- /.modal-dialog -->
+				</div>
+				<!-- /.modal -->
+
+				<!--弹出修改用户窗口-->
+				<div class="modal fade" id="reviseUser" role="dialog"
+					 aria-labelledby="gridSystemModalLabel">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<h4 class="modal-title" id="gridSystemModalLabelTitle1">修改用户</h4>
+							</div>
+							<div class="modal-body">
+								<div class="container-fluid">
+									<form class="form-horizontal" id="form1">
+										<input type="hidden" id="id" name="id" placeholder="">
+										<div class="form-group">
+											<label for="realName1" class="col-xs-3 control-label">真实姓名：</label>
+											<div class="col-xs-8 ">
+												<input type="" class="form-control input-sm duiqi"
+													   id="realName1" name="realName" placeholder="">
+											</div>
+										</div>
+										<div class="form-group ">
+											<label for="uName1" class="col-xs-3 control-label">用户名：</label>
+											<div class="col-xs-8 ">
+												<input type="" class="form-control input-sm duiqi"
+													   id="uName1" name="userName" placeholder="">
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="password1" class="col-xs-3 control-label">密码：</label>
+											<div class="col-xs-8">
+												<input type="password" class="form-control input-sm duiqi"
+													   id="password1" name="password" placeholder="">
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="aid1" class="col-xs-3 control-label">单位id：</label>
+											<div class="col-xs-8">
+												<input type="" class="form-control input-sm duiqi"
+													   id="aid1" name="aid" placeholder="">
+											</div>
+										</div>
+										<div class="form-group">
+											<input type="hidden" id="version1" name="version"></input>
+										</div>
+										<div class="form-group">
+											<input type="hidden" id="status1" name="status"></input>
+											<label for="status" class="col-xs-3 control-label">状态：</label>
+											<div class="col-xs-8">
+												<label class="control-label" for="situation3"> <input
+														type="radio" name="situation1" id="situation3" value="0">正常
+												</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label
+													class="control-label" for="situation4"> <input
+													type="radio" name="situation1" id="situation4" value="1"> 禁用
+											</label>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-xs btn-white"
+										data-dismiss="modal">取 消</button>
+								<button type="button" class="btn btn-xs btn-green"
+										onclick="editUser()">保 存</button>
+							</div>
+						</div>
+						<!-- /.modal-content -->
+					</div>
+					<!-- /.modal-dialog -->
+				</div>
+				<!-- /.modal -->
+
+				<!--弹出删除用户警告窗口-->
+				<div class="modal fade" id="deleteUser" role="dialog"
+					 aria-labelledby="gridSystemModalLabel">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<h4 class="modal-title" id="gridSystemModalLabel">提示</h4>
+							</div>
+							<div class="modal-body">
+								<div class="container-fluid">确定要删除该用户？删除后不可恢复！</div>
+								<input type="hidden" id="delid"></input>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-xs btn-white"
+										data-dismiss="modal">取 消</button>
+								<button type="button" class="btn  btn-xs btn-danger"
+										onclick="delUser()">确认</button>
+							</div>
+						</div>
+						<!-- /.modal-content -->
+					</div>
+					<!-- /.modal-dialog -->
+				</div>
+				<!-- /.modal -->
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="/static/common/js/jquery.nouislider.js"></script>
+
+<!-- this page specific inline scripts -->
+<script>
+    //min/max slider
+    function huadong(my, unit, def, max) {
+        $(my).noUiSlider(
+            {
+                range : [ 0, max ],
+                start : [ def ],
+                handles : 1,
+                connect : 'upper',
+                slide : function() {
+                    var val = Math.floor($(this).val());
+                    $(this).find(".noUi-handle").text(val + unit);
+                    console.log($(this).find(".noUi-handle").parent()
+                        .parent().html());
+                },
+                set : function() {
+                    var val = Math.floor($(this).val());
+                    $(this).find(".noUi-handle").text(val + unit);
+                }
+            });
+        $(my).val(def, true);
+    }
+    huadong('.slider-minmax1', "分钟", "5", 30);
+    huadong('.slider-minmax2', "分钟", "6", 15);
+    huadong('.slider-minmax3', "分钟", "10", 60);
+    huadong('.slider-minmax4', "次", "2", 10);
+    huadong('.slider-minmax5', "天", "3", 7);
+    huadong('.slider-minmax6', "天", "8", 10);
+
+    var _pageNum = 1, _pageSize = 10, currPage = 1;
+    laypage = layui.laypage
+
+
+    $(function() {
+        getData(_pageNum, _pageSize);
+    })
+
+    //检索
+    function search() {
+        getData(_pageNum, _pageSize);
+    }
+
+    function getData(pageNum, pageSize) {
+        var searchName = $("#searchName").val();//活动名称
+        $.ajax({
+            type : "post",
+            url : "/user/getData",
+            data : {
+                "pageNum" : pageNum,
+                "pageSize" : pageSize,
+                "name" : searchName,
+            },
+            success : function(result) {
+                if (result.success) {
+                    currPage = pageNum;
+                    result.start = (pageNum - 1) * pageSize;
+                    var html = template('itemTpl', result);
+
+                    $("#list").html(html);
+                    initPageFoot(result.data.total, pageNum, pageSize);
+                } else {
+                    alert(result.msg);
+                }
+            },
+            error : function(XMLHttpRequest, textStatus) {
+                alert("操作失败");
+            }
+        });
+    }
+
+    function edit(id) {
+        $("#id").val(id);
+        $.ajax({
+            type : "post",
+            url : "/user/findById",
+            data : {
+                "id" : id
+            },
+            success : function(result) {
+                if (result.success) {
+                    var data = result.data;
+                    $("#realName1").val(data.realName);
+                    $("#uName1").val(data.userName);
+                    $("#password1").val(data.password);
+                    $("#aid1").val(data.aid);
+                    $("#status1").val(data.status);
+                    $("#version1").val(data.version);
+                    $("input:radio[value=" + data.status + "]").attr(
+                        'checked', 'true');
+
+                } else {
+                    alert(result.msg);
+                }
+            },
+            error : function(XMLHttpRequest, textStatus) {
+                alert("操作失败");
+            }
+        });
+        // $("#reviseSchool").show();
+    }
+    function del(id) {
+        $("#delid").val(id);
+        // $("#reviseSchool").show();
+    }
+
+    function delUser() {
+        var id = $("#delid").val();
+        $.getJSON('/user/del?id=' + id, function(data) {
+            if (data.success) {
+                //此处为正常的处理逻辑;
+                window.location.href = "/user/list";
+            } else {
+                alert(data.msg);
+            }
+        });
+    }
+
+    function addUser() {
+        var realName = $.trim($("#realName").val());
+        var userName = $.trim($("#uName").val());
+        var password = $.trim($("#password").val());
+        var aid = $.trim($("#aid").val());
+        var status = $('input[name="situation"]:checked').val();
+        $("#status").val(status);
+        if (realName == "") {
+            alert("请输入真实姓名");
+            return false;
+        } else if (userName == "") {
+            alert("请输入用户名");
+            return false;
+        } else if (password == "") {
+            alert("请输入密码");
+            return false;
+        } else if (aid == "") {
+            alert("请输入单位aid");
+            return false;
+        } else {
+            $("#form").ajaxSubmit({
+                type : "post",
+                url : "/user/addoredit",
+                success : function(data) {
+                    if (data.success) {
+                        //此处为正常的处理逻辑;
+                        window.location.href = "/user/list";
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+
+        // alert(name);
+
+    }
+    function editUser() {
+        var realName = $.trim($("#realName1").val());
+        var userName = $.trim($("#uName1").val());
+        var password = $.trim($("#password1").val());
+        var aid = $.trim($("#aid1").val());
+
+        var status = $('input[name="situation1"]:checked').val();
+        $("#status1").val(status);
+        if (realName == "") {
+            alert("请输入真实姓名");
+            return false;
+        } else if (userName == "") {
+            alert("请输入用户名");
+            return false;
+        } else if (password == "") {
+            alert("请输入密码");
+            return false;
+        } else if (aid == "") {
+            alert("请输入单位aid");
+            return false;
+        } else {
+            $("#form1").ajaxSubmit({
+                type : "post",
+                url : "/user/addoredit",
+                success : function(data) {
+                    if (data.success) {
+                        //此处为正常的处理逻辑;
+                        window.location.href = "/user/list";
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+
+        // alert(name);
+
+    }
+
+    function initPageFoot(total, pageNum, pageSize) {
+        if (total == 0) {
+            $("#blank").show();
+        } else {
+            $("#blank").hide();
+        }
+        if (total > pageSize) {
+            $("#pagination").show();
+            laypage.render({
+                elem: 'pagination',
+                count: total,
+                limit: pageSize,
+                curr: pageNum,
+                theme: '#3091f2',
+                jump: function (obj, first) {
+                    if (!first) {
+                        getData(obj.curr, pageSize)
+                    }
+                }
+            });
+        } else {
+            $("#pagination").hide();
+        }
+    }
+</script>
+<script type="text/html" id="itemTpl">
+	{{each data.records as bean}}
+
+	<div class="row" >
+		<div class="col-xs-2" >{{$index+start+1}}</div>
+		<div class="col-xs-2" >{{bean.realName}}</div>
+		<div class="col-xs-2" >{{bean.userName}}</div>
+		<div class="col-xs-2" >{{bean.aid}}</div>
+		<div class="col-xs-2" >
+			{{if bean.status==0}}正常{{/if}}
+			{{if bean.status==1}}禁止{{/if}}
+		</div>
+		<div class="col-xs-2">
+			<button class="btn btn-success btn-xs" data-toggle="modal"
+					data-target="#reviseUser" onclick="edit({{bean.id}})">修改</button>
+			<button class="btn btn-danger btn-xs" data-toggle="modal"
+					data-target="#deleteUser" onclick="del({{bean.id}})">删除</button>
+		</div>
+	</div>
+
+	{{/each}}
+</script>
+</body>
+
+</html>
